@@ -1,16 +1,32 @@
 backend:
   name: git-gateway
   branch: main
+
 media_folder: "public/uploads"
 public_folder: "/uploads"
 locale: "it"
+
 collections:
+  # SEZIONE 1: I LAVORI (PORTFOLIO)
+  - name: "portfolio"
+    label: "Lavori Svolti"
+    folder: "src/content/portfolio"
+    create: true
+    slug: "{{year}}-{{slug}}"
+    fields:
+      - {label: "Titolo Lavoro", name: "title", widget: "string"}
+      - {label: "Data", name: "date", widget: "datetime"}
+      - {label: "Foto Principale", name: "image", widget: "image"}
+      - {label: "Descrizione", name: "body", widget: "markdown"}
+
+  # SEZIONE 2: I PRODOTTI
   - name: "prodotti"
     label: "Prodotti"
     folder: "src/content/prodotti"
     create: true
     slug: "{{slug}}"
     fields:
-      - {label: "Nome", name: "title", widget: "string"}
-      - {label: "Foto", name: "image", widget: "image"}
-      - {label: "Descrizione", name: "body", widget: "markdown"}
+      - {label: "Nome Prodotto", name: "title", widget: "string"}
+      - {label: "Categoria", name: "category", widget: "select", options: ["Piante", "Vasi", "Attrezzi", "Terricci"]}
+      - {label: "Foto Prodotto", name: "image", widget: "image"}
+      - {label: "Dettagli", name: "body", widget: "markdown"}
