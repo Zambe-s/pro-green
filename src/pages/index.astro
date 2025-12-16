@@ -1,16 +1,148 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import ProductCard from '../components/ProductCard.astro';
+import ContactSection from '../components/ContactSection.astro';
+import Reviews from '../components/Reviews.astro'; // <--- Importato
+import { getCollection } from 'astro:content';
 
+// Recuperiamo i dati
+const tuttiProdotti = await getCollection('prodotti');
+const tuttiLavori = await getCollection('portfolio');
+
+// PRENDIAMO SOLO I PRIMI 3 ELEMENTI PER L'ANTEPRIMA IN HOME
+const prodottiAnteprima = tuttiProdotti.slice(0, 3);
+const lavoriAnteprima = tuttiLavori.slice(0, 3);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="ProGreen Solution by Boscardi Giardini">
+  <Navbar />
+  
+  <header class="relative h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-stone-900">
+      <img 
+        src="https://images.unsplash.com/photo-1491147334573-44cbb4602074?q=80&w=2574&auto=format&fit=crop" 
+        alt="Giardino ProGreen" 
+        class="w-full h-full object-cover opacity-60"
+      />
+    </div>
+
+    <div class="relative z-10 text-center px-6 max-w-5xl mx-auto mt-20">
+      <span class="text-emerald-400 font-bold tracking-[0.2em] text-sm uppercase mb-4 block animate-fade-in-up">
+        By Boscardi Giardini
+      </span>
+      <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-white tracking-tight leading-none mb-8 drop-shadow-lg">
+        ProGreen <br />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-200">
+          Solution.
+        </span>
+      </h1>
+      
+      <p class="text-stone-200 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-light mb-12">
+        Dopo 10 anni di attività sul campo, la <strong>Boscardi Giardini</strong> si evolve. 
+        Nasce il nuovo punto di riferimento a <strong>Malnate</strong> per la progettazione del verde e la rivendita professionale.
+        Affidati alla nostra esperienza per trasformare il tuo spazio esterno.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#lavori" class="px-8 py-4 bg-white text-stone-900 font-bold rounded-full hover:bg-stone-100 transition-all shadow-xl shadow-white/10">
+          Le Nostre Realizzazioni
+        </a>
+        <a href="#contatti" class="px-8 py-4 border-2 border-emerald-500 bg-emerald-900/50 text-white font-bold rounded-full hover:bg-emerald-600 hover:border-emerald-600 transition-all backdrop-blur-sm">
+          Vieni in Negozio
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+    <section id="prodotti" class="py-24 bg-stone-50">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+          <div>
+            <h2 class="text-4xl font-bold text-stone-900 mb-2">Rivendita Professionale</h2>
+            <p class="text-stone-500">I prodotti che usiamo noi professionisti, ora disponibili per te.</p>
+          </div>
+          <a href="/catalogo" class="group flex items-center gap-2 text-emerald-700 font-semibold hover:text-emerald-900 transition-colors">
+            Vai al Catalogo Completo 
+            <span class="group-hover:translate-x-1 transition-transform">-></span>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {prodottiAnteprima.map((prodotto) => (
+            <a href={`/prodotti/${prodotto.slug}`} class="block h-full hover:no-underline">
+              <ProductCard 
+                title={prodotto.data.title} 
+                category={prodotto.data.category} 
+                image={prodotto.data.image} 
+              />
+            </a>
+          ))}
+        </div>
+        
+        <div class="mt-12 text-center md:hidden">
+            <a href="/catalogo" class="inline-block px-6 py-3 border border-stone-300 rounded-full text-stone-600 font-bold text-sm">Vedi Tutto il Catalogo</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="lavori" class="py-24 bg-white border-t border-stone-100">
+      <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl font-bold text-stone-900 mb-16 text-center">Dal progetto alla realtà</h2>
+        
+        <div class="space-y-24">
+          {lavoriAnteprima.map((lavoro, index) => (
+            <div class={`flex flex-col md:flex-row gap-12 items-center ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
+              
+              <div class="w-full md:w-1/2">
+                <a href={`/lavori/${lavoro.slug}`} class="block relative group rounded-3xl overflow-hidden shadow-2xl cursor-pointer">
+                  {lavoro.data.image && (
+                    <img 
+                      src={lavoro.data.image} 
+                      alt={lavoro.data.title} 
+                      class="w-full h-[500px] object-cover group-hover:scale-105 transition-transform duration-700" 
+                    />
+                  )}
+                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span class="text-white font-bold tracking-widest border border-white px-6 py-3 rounded-full backdrop-blur-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                      VEDI PROGETTO
+                    </span>
+                  </div>
+                </a>
+              </div>
+              
+              <div class="w-full md:w-1/2 space-y-6">
+                <span class="text-emerald-600 font-bold tracking-widest text-sm uppercase">
+                    Anno {new Date(lavoro.data.date).getFullYear()}
+                </span>
+                
+                <h3 class="text-4xl md:text-5xl font-bold text-stone-900 leading-tight">
+                  <a href={`/lavori/${lavoro.slug}`} class="hover:text-emerald-800 transition-colors">
+                    {lavoro.data.title}
+                  </a>
+                </h3>
+                
+                <p class="text-stone-500 text-lg leading-relaxed line-clamp-3">
+                  {lavoro.data.description}
+                </p>
+                
+                <div class="pt-4">
+                  <a href={`/lavori/${lavoro.slug}`} class="inline-flex items-center text-stone-900 font-bold hover:text-emerald-600 transition-colors border-b-2 border-stone-200 hover:border-emerald-600 pb-1">
+                    Leggi la storia del progetto
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <Reviews />
+
+    <ContactSection />
+
+  </main>
+</Layout>

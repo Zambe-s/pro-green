@@ -1,0 +1,109 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import ContactSection from '../../components/ContactSection.astro';
+
+// 1. Genera percorsi statici per tutti i prodotti
+export async function getStaticPaths() {
+  const prodotti = await getCollection('prodotti');
+  return prodotti.map((prodotto) => ({
+    params: { slug: prodotto.slug },
+    props: { prodotto },
+  }));
+}
+
+const { prodotto } = Astro.props;
+const { Content } = await prodotto.render();
+
+// Link WhatsApp precompilato
+const whatsappLink = `https://wa.me/393330000000?text=Buongiorno,%20vorrei%20informazioni%20sul%20prodotto:%20${encodeURIComponent(prodotto.data.title)}`;
+---
+
+<Layout title={`${prodotto.data.title} - Scheda Tecnica`}>
+  <Navbar />
+
+  <main class="pt-32 pb-12 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <nav class="flex text-sm text-stone-500 mb-8 border-b border-stone-100 pb-4">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-emerald-600">Home</a></li>
+          <li>/</li>
+          <li><a href="/catalogo" class="hover:text-emerald-600">Catalogo</a></li>
+          <li>/</li>
+          <li class="text-stone-900 font-bold">{prodotto.data.title}</li>
+        </ol>
+      </nav>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        
+        <div class="space-y-6">
+          <div class="aspect-square bg-stone-50 rounded-2xl overflow-hidden border border-stone-100 relative shadow-sm">
+            {prodotto.data.image ? (
+              <img 
+                src={prodotto.data.image} 
+                alt={prodotto.data.title} 
+                class="w-full h-full object-cover"
+              />
+            ) : (
+              <div class="flex items-center justify-center h-full text-stone-300">Nessuna immagine disponibile</div>
+            )}
+            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 text-xs font-bold uppercase tracking-widest text-emerald-800 rounded border border-stone-200">
+              {prodotto.data.category}
+            </span>
+          </div>
+          <p class="text-xs text-center text-stone-400">Le immagini sono a scopo illustrativo.</p>
+        </div>
+
+        <div class="flex flex-col h-full">
+          <h1 class="text-4xl font-bold text-stone-900 mb-6 leading-tight">
+            {prodotto.data.title}
+          </h1>
+
+          <div class="prose prose-stone text-stone-600 mb-8">
+            <Content />
+          </div>
+
+          <div class="bg-stone-50 rounded-xl p-6 border border-stone-200 mb-8">
+            <h3 class="text-sm font-bold text-stone-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              Dettagli Fornitura
+            </h3>
+            <ul class="space-y-3 text-sm">
+              <li class="flex justify-between border-b border-stone-200 pb-2">
+                <span class="text-stone-500">Disponibilità:</span>
+                <span class="font-semibold text-emerald-700">Verifica in magazzino</span>
+              </li>
+              <li class="flex justify-between border-b border-stone-200 pb-2">
+                <span class="text-stone-500">Ordine Minimo:</span>
+                <span class="font-semibold text-stone-800">1 Pezzo</span>
+              </li>
+              <li class="flex justify-between border-b border-stone-200 pb-2">
+                <span class="text-stone-500">Consegna:</span>
+                <span class="font-semibold text-stone-800">Spedizione o Ritiro in sede</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-auto space-y-3">
+            <a href={whatsappLink} target="_blank" class="flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592z"/></svg>
+              Chiedi info su WhatsApp
+            </a>
+            <a href="#contatti" class="block w-full text-center bg-stone-900 hover:bg-stone-800 text-white font-semibold py-4 px-6 rounded-xl transition-colors">
+              Richiedi Preventivo via Mail
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <ContactSection />
+
+  <footer class="bg-stone-900 text-stone-500 py-10 text-center text-sm border-t border-stone-800">
+    &copy; 2024 ProGreen Design.
+  </footer>
+</Layout>

@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getCollection } from 'astro:content';
+
+// Recupero tutti i prodotti
+const prodotti = await getCollection('prodotti');
+
+// Estraggo le categorie uniche per creare i pulsanti dei filtri
+const categorie = [...new Set(prodotti.map((p) => p.data.category).filter(Boolean))];
+---
+
+<Layout title="Catalogo Prodotti - ProGreen">
+  <Navbar />
+
+  <main class="pt-32 pb-24 min-h-screen bg-stone-50">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold text-stone-900 mb-4">Il Nostro Catalogo</h1>
+        <p class="text-stone-500 text-lg">
+          Esplora la nostra selezione di prodotti professionali. 
+          Clicca sulle categorie per filtrare o su un prodotto per vedere la scheda tecnica.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-3 mb-12">
+        <button 
+          class="filter-btn active px-6 py-2 rounded-full text-sm font-bold transition-all border border-stone-900 bg-stone-900 text-white shadow-lg cursor-pointer"
+          data-filter="all"
+        >
+          Tutti i Prodotti
+        </button>
+
+        {categorie.map((cat) => (
+          <button 
+            class="filter-btn px-6 py-2 rounded-full text-sm font-bold transition-all border border-stone-200 bg-white text-stone-600 hover:border-emerald-500 hover:text-emerald-600 cursor-pointer capitalize"
+            data-filter={cat}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="griglia-prodotti">
+        {prodotti.map((prodotto) => (
+          // Questo DIV serve per nascondere/mostrare in base alla categoria
+          <div class="prodotto-item transition-all duration-500" data-category={prodotto.data.category}>
+             <a href={`/prodotti/${prodotto.slug}`} class="block h-full">
+                <ProductCard 
+                  title={prodotto.data.title} 
+                  category={prodotto.data.category} 
+                  image={prodotto.data.image} 
+                />
+             </a>
+          </div>
+        ))}
+      </div>
+
+      <div id="nessun-risultato" class="hidden text-center py-20">
+        <p class="text-stone-400 text-xl font-light">Nessun articolo trovato in questa categoria.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="bg-stone-900 text-stone-500 py-10 text-center text-sm border-t border-stone-800">
+    &copy; 2024 ProGreen Design.
+  </footer>
+</Layout>
+
+<script>
+  const buttons = document.querySelectorAll('.filter-btn');
+  const items = document.querySelectorAll('.prodotto-item');
+  const msgEmpty = document.getElementById('nessun-risultato');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // 1. Cambia stile bottoni (Visualizza attivo)
+      buttons.forEach(b => {
+        b.classList.remove('bg-stone-900', 'text-white', 'shadow-lg');
+        b.classList.add('bg-white', 'text-stone-600');
+      });
+      btn.classList.remove('bg-white', 'text-stone-600');
+      btn.classList.add('bg-stone-900', 'text-white', 'shadow-lg');
+
+      // 2. Filtra elementi
+      const categoriaScelta = btn.getAttribute('data-filter');
+      let conteggioVisibili = 0;
+
+      items.forEach((item) => {
+        const categoriaItem = (item as HTMLElement).getAttribute('data-category');
+        const elemento = item as HTMLElement;
+
+        if (categoriaScelta === 'all' || categoriaItem === categoriaScelta) {
+          elemento.style.display = 'block';
+          // Piccola animazione di entrata
+          setTimeout(() => { elemento.style.opacity = '1'; elemento.style.transform = 'translateY(0)'; }, 50);
+          conteggioVisibili++;
+        } else {
+          elemento.style.display = 'none';
+          elemento.style.opacity = '0';
+          elemento.style.transform = 'translateY(20px)';
+        }
+      });
+
+      // 3. Gestione messaggio vuoto
+      if (conteggioVisibili === 0 && msgEmpty) msgEmpty.classList.remove('hidden');
+      else if (msgEmpty) msgEmpty.classList.add('hidden');
+    });
+  });
+</script>
