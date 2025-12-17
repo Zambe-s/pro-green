@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pro-green.netlify.app
+Sitemap: https://pro-green.netlify.app/sitemap-index.xml
