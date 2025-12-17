@@ -6,18 +6,16 @@ import ContactSection from '../components/ContactSection.astro';
 import Reviews from '../components/Reviews.astro'; 
 import { getCollection } from 'astro:content';
 
-// Recuperiamo i dati
+// Recuperiamo i dati dei prodotti
 const tuttiProdotti = await getCollection('prodotti');
-const tuttiLavori = await getCollection('portfolio');
 
 // PRENDIAMO SOLO I PRIMI 3 ELEMENTI PER L'ANTEPRIMA IN HOME
 const prodottiAnteprima = tuttiProdotti.slice(0, 3);
-const lavoriAnteprima = tuttiLavori.slice(0, 3);
 ---
 
 <Layout 
-  title="ProGreen Solution | Giardinieri e Prodotti Giardinaggio Malnate Varese"
-  description="Vendita prodotti professionali e progettazione giardini a Malnate (VA). Robot tagliaerba, sementi e consulenza. Oltre 10 anni di esperienza Boscardi."
+  title="ProGreen Solution | Prodotti Giardinaggio e Servizi a Malnate"
+  description="Vendita sementi, robot tagliaerba e prodotti professionali a Malnate (VA). Il punto di riferimento per il verde by Boscardi Giardini."
 >
   <Navbar />
   
@@ -43,16 +41,19 @@ const lavoriAnteprima = tuttiLavori.slice(0, 3);
       
       <p class="text-stone-200 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed font-light mb-12">
         Dopo 10 anni di attività sul campo, la <strong>Boscardi Giardini</strong> si evolve. 
-        Nasce il nuovo punto di riferimento a <strong>Malnate</strong> per la progettazione del verde e la rivendita professionale.
-        Affidati alla nostra esperienza per trasformare il tuo spazio esterno.
+        Nasce il nuovo punto di riferimento a <strong>Malnate</strong> per la rivendita di prodotti professionali e la cura del verde.
       </p>
 
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="#lavori" class="px-8 py-4 bg-white text-stone-900 font-bold rounded-full hover:bg-stone-100 transition-all shadow-xl shadow-white/10">
-          Le Nostre Realizzazioni
+        <a href="/catalogo" class="px-8 py-4 bg-emerald-600 text-white font-bold rounded-full hover:bg-emerald-500 transition-all shadow-xl shadow-emerald-900/20 flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+            </svg>
+            Vai al Negozio
         </a>
-        <a href="#contatti" class="px-8 py-4 border-2 border-emerald-500 bg-emerald-900/50 text-white font-bold rounded-full hover:bg-emerald-600 hover:border-emerald-600 transition-all backdrop-blur-sm">
-          Vieni in Negozio
+        
+        <a href="/realizzazioni" class="px-8 py-4 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/20 transition-all">
+          I nostri Lavori
         </a>
       </div>
     </div>
@@ -62,89 +63,51 @@ const lavoriAnteprima = tuttiLavori.slice(0, 3);
     
     <section id="prodotti" class="py-24 bg-stone-50">
       <div class="max-w-7xl mx-auto px-6">
-        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
-          <div>
-            <h2 class="text-4xl font-bold text-stone-900 mb-2">Rivendita Professionale</h2>
-            <p class="text-stone-500">I prodotti che usiamo noi professionisti, ora disponibili per te a Malnate.</p>
-          </div>
-          <a href="/catalogo" class="group flex items-center gap-2 text-emerald-700 font-semibold hover:text-emerald-900 transition-colors">
-            Vai al Catalogo Completo 
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 group-hover:translate-x-1 transition-transform">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-            </svg>
-          </a>
+        
+        <div class="text-center mb-16">
+            <span class="text-emerald-600 font-bold tracking-widest text-sm uppercase mb-3 block">Selezione Professionale</span>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-stone-900 mb-6">Il Nostro Shop</h2>
+            <p class="text-stone-500 max-w-2xl mx-auto text-lg">
+              Non vendiamo prodotti da supermercato. Qui trovi solo le attrezzature, le sementi e i concimi che usiamo noi ogni giorno nei nostri cantieri.
+            </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {prodottiAnteprima.map((prodotto) => (
-            <a href={`/prodotti/${prodotto.slug}`} class="block h-full hover:no-underline">
-              <ProductCard 
+            <div class="h-full">
+                <ProductCard 
                 title={prodotto.data.title} 
                 category={prodotto.data.category} 
-                image={prodotto.data.image} 
-              />
-            </a>
-          ))}
-        </div>
-        
-        <div class="mt-12 text-center md:hidden">
-            <a href="/catalogo" class="inline-block px-6 py-3 border border-stone-300 rounded-full text-stone-600 font-bold text-sm">Vedi Tutto il Catalogo</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="lavori" class="py-24 bg-white border-t border-stone-100">
-      <div class="max-w-7xl mx-auto px-6">
-        <h2 class="text-4xl font-bold text-stone-900 mb-16 text-center">Dal progetto alla realtà</h2>
-        
-        <div class="space-y-24">
-          {lavoriAnteprima.map((lavoro, index) => (
-            <div class={`flex flex-col md:flex-row gap-12 items-center ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
-              
-              <div class="w-full md:w-1/2">
-                <a href={`/lavori/${lavoro.slug}`} class="block relative group rounded-3xl overflow-hidden shadow-2xl cursor-pointer">
-                  {lavoro.data.image && (
-                    <img 
-                      src={lavoro.data.image} 
-                      alt={lavoro.data.title} 
-                      class="w-full h-[500px] object-cover group-hover:scale-105 transition-transform duration-700" 
-                    />
-                  )}
-                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span class="text-white font-bold tracking-widest border border-white px-6 py-3 rounded-full backdrop-blur-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                      VEDI PROGETTO
-                    </span>
-                  </div>
-                </a>
-              </div>
-              
-              <div class="w-full md:w-1/2 space-y-6">
-                <span class="text-emerald-600 font-bold tracking-widest text-sm uppercase">
-                    Anno {new Date(lavoro.data.date).getFullYear()}
-                </span>
-                
-                <h3 class="text-4xl md:text-5xl font-bold text-stone-900 leading-tight">
-                  <a href={`/lavori/${lavoro.slug}`} class="hover:text-emerald-800 transition-colors">
-                    {lavoro.data.title}
-                  </a>
-                </h3>
-                
-                <p class="text-stone-500 text-lg leading-relaxed line-clamp-3">
-                  {lavoro.data.description}
-                </p>
-                
-                <div class="pt-4">
-                  <a href={`/lavori/${lavoro.slug}`} class="inline-flex items-center text-stone-900 font-bold hover:text-emerald-600 transition-colors border-b-2 border-stone-200 hover:border-emerald-600 pb-1">
-                    Leggi la storia del progetto
-                  </a>
-                </div>
-              </div>
+                image={prodotto.data.image}
+                price={prodotto.data.price}
+                slug={prodotto.slug} 
+                />
             </div>
           ))}
         </div>
+        
+        <div class="bg-emerald-900 rounded-3xl p-8 md:p-12 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-emerald-800 rounded-full opacity-50 blur-3xl"></div>
+            
+            <div class="relative z-10 text-center md:text-left">
+                <h3 class="text-2xl font-bold mb-2">Non sai cosa scegliere?</h3>
+                <p class="text-emerald-200">Visita il catalogo completo o scrivici per un consiglio tecnico.</p>
+            </div>
+
+            <div class="relative z-10 flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                 <a href="/catalogo" class="px-8 py-4 bg-white text-emerald-900 font-bold rounded-xl hover:bg-emerald-50 transition-colors text-center shadow-lg">
+                    Vedi Tutto il Catalogo
+                 </a>
+                 <a href="https://wa.me/393343680678" target="_blank" class="px-8 py-4 bg-emerald-700 text-white font-bold rounded-xl hover:bg-emerald-600 transition-colors text-center flex items-center justify-center gap-2 border border-emerald-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.017-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                    WhatsApp
+                 </a>
+            </div>
+        </div>
+
       </div>
     </section>
-
+    
     <Reviews />
 
     <ContactSection />

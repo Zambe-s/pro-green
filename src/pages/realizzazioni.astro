@@ -1,0 +1,63 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import ContactSection from '../components/ContactSection.astro';
+import { getCollection } from 'astro:content';
+
+// Recupera TUTTI i lavori e li ordina dal più recente
+const lavori = (await getCollection('portfolio')).sort(
+	(a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<Layout 
+  title="Le Nostre Realizzazioni | ProGreen Solution"
+  description="Sfoglia il portfolio dei nostri lavori: giardini, terrazzi, impianti di irrigazione e installazioni robot a Malnate e Varese."
+>
+  <Navbar />
+  
+  <main class="bg-stone-50 min-h-screen pt-32 pb-20">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <div class="text-center mb-16">
+        <span class="text-emerald-600 font-bold tracking-widest text-sm uppercase">Portfolio</span>
+        <h1 class="text-4xl md:text-5xl font-bold text-stone-900 mt-2 mb-6">I nostri progetti</h1>
+        <p class="text-stone-500 max-w-2xl mx-auto text-lg">
+          Ogni giardino ha una storia. Qui raccogliamo le nostre migliori realizzazioni, dai piccoli interventi di precisione alle grandi riqualificazioni.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {lavori.map((lavoro) => (
+          <a href={`/lavori/${lavoro.slug}`} class="group block bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div class="relative h-64 overflow-hidden">
+              <div class="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
+              <img 
+                src={lavoro.data.image} 
+                alt={lavoro.data.title} 
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+              />
+            </div>
+            <div class="p-8">
+              <span class="text-emerald-600 text-xs font-bold uppercase tracking-wider mb-2 block">
+                {new Date(lavoro.data.date).getFullYear()} • {lavoro.data.location || "Varese"}
+              </span>
+              <h3 class="text-2xl font-bold text-stone-900 mb-3 group-hover:text-emerald-700 transition-colors">
+                {lavoro.data.title}
+              </h3>
+              <p class="text-stone-500 line-clamp-3 text-sm leading-relaxed">
+                {lavoro.data.description}
+              </p>
+              <span class="inline-block mt-4 text-stone-900 font-bold border-b-2 border-emerald-200 group-hover:border-emerald-600 pb-1 text-sm">
+                Guarda le foto
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+    </div>
+  </main>
+
+  <ContactSection />
+</Layout>

@@ -91,10 +91,51 @@ const siteUrl = "https://pro-green.netlify.app";
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script is:inline>
+        // 1. Blocco Tasto Destro e Scorciatoie (Già lo avevi, lo rimetto per completezza)
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I") || (e.ctrlKey && e.key === "u")) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // 2. TRAPPOLA DEBUGGER (Il tocco di classe)
+        // Se aprono la console, questo intervallo scatta e blocca l'ispezione
+        setInterval(function() {
+            // Questo codice non fa nulla per l'utente normale, 
+            // ma se la console è aperta, il browser si ferma qui.
+            (function(){})["constructor"]("debugger")();
+        }, 1000);
+    </script>
 	</head>
 	<body class="bg-stone-50 text-stone-800 font-['Outfit'] antialiased flex flex-col min-h-screen">
 		
         <div class="flex-grow">
+            <noscript>
+                <style>
+                    /* Questo CSS si attiva SOLO se JS è disattivato */
+                    body { 
+                        overflow: hidden !important; 
+                    }
+                    .security-curtain {
+                        display: flex !important;
+                    }
+                </style>
+            </noscript>
+
+            <div class="security-curtain fixed inset-0 z-[100000] bg-stone-900 text-white hidden flex-col items-center justify-center p-10 text-center">
+                <div class="max-w-md">
+                    <h1 class="text-4xl font-bold mb-6 text-red-500">Accesso Negato</h1>
+                    <p class="text-lg mb-4">
+                        Per visualizzare questa demo protetta è necessario abilitare <strong>JavaScript</strong>.
+                    </p>
+                    <p class="text-stone-400 text-sm">
+                        Il sito utilizza tecnologie moderne che richiedono l'esecuzione di script per funzionare e per la tutela della proprietà intellettuale.
+                    </p>
+                </div>
+            </div>
             <slot />
         </div>
 

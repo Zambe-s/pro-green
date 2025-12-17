@@ -2,16 +2,17 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import ProductCard from '../components/ProductCard.astro';
+import ContactSection from '../components/ContactSection.astro'; // Aggiunto per coerenza
 import { getCollection } from 'astro:content';
 
 // Recupero tutti i prodotti
 const prodotti = await getCollection('prodotti');
 
-// Estraggo le categorie uniche per creare i pulsanti dei filtri
+// Estraggo le categorie uniche
 const categorie = [...new Set(prodotti.map((p) => p.data.category).filter(Boolean))];
 ---
 
-<Layout title="Catalogo Prodotti - ProGreen">
+<Layout title="Catalogo Prodotti | ProGreen Solution">
   <Navbar />
 
   <main class="pt-32 pb-24 min-h-screen bg-stone-50">
@@ -27,7 +28,7 @@ const categorie = [...new Set(prodotti.map((p) => p.data.category).filter(Boolea
 
       <div class="flex flex-wrap justify-center gap-3 mb-12">
         <button 
-          class="filter-btn active px-6 py-2 rounded-full text-sm font-bold transition-all border border-stone-900 bg-stone-900 text-white shadow-lg cursor-pointer"
+          class="filter-btn active px-6 py-2 rounded-full text-sm font-bold transition-all border border-stone-900 bg-stone-900 text-white shadow-lg cursor-pointer hover:scale-105"
           data-filter="all"
         >
           Tutti i Prodotti
@@ -35,7 +36,7 @@ const categorie = [...new Set(prodotti.map((p) => p.data.category).filter(Boolea
 
         {categorie.map((cat) => (
           <button 
-            class="filter-btn px-6 py-2 rounded-full text-sm font-bold transition-all border border-stone-200 bg-white text-stone-600 hover:border-emerald-500 hover:text-emerald-600 cursor-pointer capitalize"
+            class="filter-btn px-6 py-2 rounded-full text-sm font-bold transition-all border border-stone-200 bg-white text-stone-600 hover:border-emerald-500 hover:text-emerald-600 cursor-pointer capitalize hover:scale-105"
             data-filter={cat}
           >
             {cat}
@@ -45,29 +46,29 @@ const categorie = [...new Set(prodotti.map((p) => p.data.category).filter(Boolea
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="griglia-prodotti">
         {prodotti.map((prodotto) => (
-          // Questo DIV serve per nascondere/mostrare in base alla categoria
-          <div class="prodotto-item transition-all duration-500" data-category={prodotto.data.category}>
-             <a href={`/prodotti/${prodotto.slug}`} class="block h-full">
-                <ProductCard 
-                  title={prodotto.data.title} 
-                  category={prodotto.data.category} 
-                  image={prodotto.data.image} 
-                />
-             </a>
+          // RIMOSSO IL TAG <a> CHE AVVOLGEVA TUTTO (Causava l'errore)
+          <div class="prodotto-item transition-all duration-500 h-full" data-category={prodotto.data.category}>
+             <ProductCard 
+               title={prodotto.data.title} 
+               category={prodotto.data.category} 
+               image={prodotto.data.image} 
+               price={prodotto.data.price}   /* Aggiunto il prezzo */
+               slug={prodotto.slug}          /* Fondamentale per il link interno */
+             />
           </div>
         ))}
       </div>
 
-      <div id="nessun-risultato" class="hidden text-center py-20">
-        <p class="text-stone-400 text-xl font-light">Nessun articolo trovato in questa categoria.</p>
+      <div id="nessun-risultato" class="hidden text-center py-20 bg-white rounded-3xl border border-stone-100 shadow-sm mx-auto max-w-lg mt-8">
+        <div class="text-6xl mb-4">🍂</div>
+        <p class="text-stone-900 font-bold text-xl">Nessun prodotto trovato</p>
+        <p class="text-stone-500">Prova a selezionare un'altra categoria.</p>
       </div>
 
     </div>
   </main>
-
-  <footer class="bg-stone-900 text-stone-500 py-10 text-center text-sm border-t border-stone-800">
-    &copy; 2024 ProGreen Design.
-  </footer>
+  
+  <ContactSection />
 </Layout>
 
 <script>
@@ -77,15 +78,17 @@ const categorie = [...new Set(prodotti.map((p) => p.data.category).filter(Boolea
 
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
-      // 1. Cambia stile bottoni (Visualizza attivo)
+      // 1. Reset stile bottoni
       buttons.forEach(b => {
         b.classList.remove('bg-stone-900', 'text-white', 'shadow-lg');
-        b.classList.add('bg-white', 'text-stone-600');
+        b.classList.add('bg-white', 'text-stone-600', 'border-stone-200');
       });
-      btn.classList.remove('bg-white', 'text-stone-600');
+      
+      // 2. Attiva bottone corrente
+      btn.classList.remove('bg-white', 'text-stone-600', 'border-stone-200');
       btn.classList.add('bg-stone-900', 'text-white', 'shadow-lg');
 
-      // 2. Filtra elementi
+      // 3. Filtra elementi
       const categoriaScelta = btn.getAttribute('data-filter');
       let conteggioVisibili = 0;
 
@@ -95,19 +98,30 @@ const categorie = [...new Set(prodotti.map((p) => p.data.category).filter(Boolea
 
         if (categoriaScelta === 'all' || categoriaItem === categoriaScelta) {
           elemento.style.display = 'block';
-          // Piccola animazione di entrata
-          setTimeout(() => { elemento.style.opacity = '1'; elemento.style.transform = 'translateY(0)'; }, 50);
+          // Piccola animazione fade-in
+          requestAnimationFrame(() => {
+              elemento.style.opacity = '1';
+              elemento.style.transform = 'translateY(0) scale(1)';
+          });
           conteggioVisibili++;
         } else {
-          elemento.style.display = 'none';
           elemento.style.opacity = '0';
-          elemento.style.transform = 'translateY(20px)';
+          elemento.style.transform = 'translateY(10px) scale(0.95)';
+          // Aspetta la fine dell'animazione per nascondere
+          setTimeout(() => {
+             if(elemento.style.opacity === '0') elemento.style.display = 'none';
+          }, 300);
         }
       });
 
-      // 3. Gestione messaggio vuoto
-      if (conteggioVisibili === 0 && msgEmpty) msgEmpty.classList.remove('hidden');
-      else if (msgEmpty) msgEmpty.classList.add('hidden');
+      // 4. Gestione messaggio vuoto
+      if (msgEmpty) {
+          if (conteggioVisibili === 0) {
+              msgEmpty.classList.remove('hidden');
+          } else {
+              msgEmpty.classList.add('hidden');
+          }
+      }
     });
   });
 </script>

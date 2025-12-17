@@ -1,23 +1,62 @@
 ---
-const { title, category, image } = Astro.props;
+export interface Props {
+  title: string;
+  category: string;
+  image: string;
+  price?: string; // Il punto di domanda significa che è opzionale
+  slug: string;   // FONDAMENTALE: serve per creare il link
+}
+
+const { title, category, image, price, slug } = Astro.props;
 ---
 
-<div class="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer">
-  <div class="aspect-[4/5] overflow-hidden bg-stone-100">
-    {image && (
-      <img 
+<a href={`/prodotti/${slug}`} class="group relative block bg-white rounded-[2rem] overflow-hidden border border-stone-100 hover:border-emerald-200 shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 h-full flex flex-col">
+  
+  <div class="relative aspect-[4/3] overflow-hidden bg-stone-100">
+    {image ? (
+        <img 
         src={image} 
         alt={title} 
-        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-      />
+        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+        />
+    ) : (
+        <div class="w-full h-full flex items-center justify-center text-stone-300 bg-stone-50">No Image</div>
     )}
+    
+    <div class="absolute top-4 left-4">
+      <span class="bg-white/90 backdrop-blur-sm text-stone-600 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-sm border border-stone-100">
+        {category}
+      </span>
+    </div>
+
+    <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+      <span class="bg-white text-emerald-700 font-bold rounded-full px-6 py-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 shadow-lg">
+        Visualizza
+      </span>
+    </div>
   </div>
-  
-  <div class="p-6">
-    <p class="text-emerald-600 text-xs font-bold tracking-widest uppercase mb-2">{category}</p>
-    <h3 class="text-xl font-semibold text-stone-900 mb-4 group-hover:text-emerald-800 transition-colors">{title}</h3>
-    <span class="inline-block text-xs font-medium text-stone-400 border-b border-stone-200 pb-0.5 group-hover:border-emerald-600 group-hover:text-emerald-600 transition-all">
-      SCOPRI DI PIÙ
-    </span>
+
+  <div class="p-6 flex flex-col flex-grow">
+    <div class="flex justify-between items-start mb-2">
+      <h3 class="text-xl font-bold text-stone-800 leading-tight group-hover:text-emerald-700 transition-colors">
+        {title}
+      </h3>
+    </div>
+    
+    <div class="mt-auto pt-4 border-t border-stone-100 flex items-center justify-between">
+      <div>
+        {price ? (
+          <span class="text-lg font-bold text-emerald-600">{price}</span>
+        ) : (
+          <span class="text-sm font-bold text-stone-400 uppercase">Vedi dettagli</span>
+        )}
+      </div>
+      
+      <div class="w-8 h-8 rounded-full bg-stone-50 flex items-center justify-center text-stone-400 group-hover:bg-emerald-600 group-hover:text-white transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </div>
+    </div>
   </div>
-</div>
+</a>
