@@ -1,0 +1,103 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import ContactSection from '../components/ContactSection.astro';
+---
+
+<Layout title="L'Azienda e la Storia | ProGreen Solution">
+  <Navbar />
+  
+  <main>
+    <div class="relative bg-stone-900 py-32 overflow-hidden">
+      <div class="absolute inset-0 opacity-40">
+        <img src="https://images.unsplash.com/photo-1558904541-efa843a96f01?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Sfondo natura">
+      </div>
+      <div class="relative z-10 max-w-7xl mx-auto px-6 text-center">
+        <span class="text-emerald-400 font-bold tracking-widest text-sm uppercase mb-4 block">La nostra storia</span>
+        <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">Da Boscardi Giardini <br> a ProGreen Solution</h1>
+        <p class="text-xl text-stone-300 max-w-2xl mx-auto leading-relaxed">
+          Un percorso di crescita e passione per il verde che dura da oltre un decennio.
+        </p>
+      </div>
+    </div>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        
+        <div class="space-y-6">
+          <h2 class="text-3xl font-bold text-stone-900">10 Anni di Esperienza sul campo</h2>
+          <div class="prose prose-stone prose-lg text-stone-500">
+            <p>
+              Tutto è iniziato con <strong>Boscardi Giardini</strong>, una piccola realtà nata dalla passione per la cura del verde. Anno dopo anno, giardino dopo giardino, abbiamo imparato che i clienti non cercavano solo qualcuno che tagliasse l'erba, ma dei veri consulenti.
+            </p>
+            <p>
+              Abbiamo visto cambiare le tecnologie: dai vecchi tosaerba a scoppio ai moderni <strong>robot autonomi</strong>. Abbiamo studiato le nuove tecniche di irrigazione e i design contemporanei.
+            </p>
+            <p>
+              Oggi, con <strong>ProGreen Solution</strong>, portiamo questa esperienza a un livello superiore: non siamo più solo "giardinieri", ma un punto di riferimento a Malnate per la vendita, l'assistenza e la progettazione professionale.
+            </p>
+          </div>
+        </div>
+
+        <div class="relative">
+          <div class="absolute -inset-4 bg-emerald-100 rounded-3xl transform rotate-3"></div>
+          
+          <img 
+            src="/team.jpg" 
+            alt="Il Team Boscardi" 
+            class="relative rounded-3xl shadow-xl w-full h-[500px] object-cover grayscale hover:grayscale-0 transition-all duration-500"
+          />
+          
+          <div class="absolute bottom-6 left-6 bg-white p-4 rounded-xl shadow-lg max-w-xs">
+            <p class="text-stone-900 font-bold text-sm">"La cura del dettaglio è la nostra firma."</p>
+            <p class="text-emerald-600 text-xs mt-1 uppercase font-bold tracking-wider">- Il Team Boscardi</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="py-20 bg-stone-50 border-t border-stone-200">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-stone-900">Perché sceglierci?</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 hover:border-emerald-200 transition-colors">
+            <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            </div>
+            <h3 class="text-xl font-bold text-stone-900 mb-3">Velocità e Precisione</h3>
+            <p class="text-stone-500">
+              Sappiamo che il tempo è prezioso. Interveniamo con attrezzature professionali che riducono i tempi di lavoro garantendo una pulizia impeccabile.
+            </p>
+          </div>
+
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 hover:border-emerald-200 transition-colors">
+            <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <h3 class="text-xl font-bold text-stone-900 mb-3">Assistenza Reale</h3>
+            <p class="text-stone-500">
+              Non siamo un grande magazzino dove sei un numero. Se compri un robot da noi, ti spieghiamo come usarlo e siamo lì se serve ripararlo.
+            </p>
+          </div>
+
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 hover:border-emerald-200 transition-colors">
+            <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <h3 class="text-xl font-bold text-stone-900 mb-3">Radicati nel Territorio</h3>
+            <p class="text-stone-500">
+              Conosciamo il clima e il terreno di Malnate e Varese. Ti consigliamo le piante e i prodotti che funzionano davvero qui, non quelli generici.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  
+  <ContactSection />
+</Layout>

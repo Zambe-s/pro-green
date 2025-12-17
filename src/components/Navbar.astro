@@ -7,6 +7,9 @@
     
     <ul class="hidden md:flex gap-6 font-medium text-stone-600 text-sm tracking-wide items-center">
       <li><a href="/" class="hover:text-emerald-600 transition-colors">HOME</a></li>
+      
+      <li><a href="/azienda" class="hover:text-emerald-600 transition-colors">CHI SIAMO</a></li>
+      
       <li><a href="/#lavori" class="hover:text-emerald-600 transition-colors">REALIZZAZIONI</a></li>
       <li><a href="/catalogo" class="hover:text-emerald-600 transition-colors">CATALOGO</a></li>
       
@@ -39,6 +42,9 @@
   <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-white border-b border-stone-200 shadow-xl md:hidden">
     <ul class="flex flex-col p-6 space-y-4 font-medium text-stone-700 text-center">
       <li><a href="/" class="block py-2 hover:text-emerald-600">HOME</a></li>
+      
+      <li><a href="/azienda" class="block py-2 hover:text-emerald-600">CHI SIAMO</a></li>
+      
       <li><a href="/#lavori" class="block py-2 hover:text-emerald-600">REALIZZAZIONI</a></li>
       <li><a href="/catalogo" class="block py-2 hover:text-emerald-600">CATALOGO</a></li>
       
@@ -69,7 +75,6 @@
       menu.classList.toggle('hidden');
     });
 
-    // Chiude il menu quando clicchi un link
     const links = menu.querySelectorAll('a');
     links.forEach(link => {
       link.addEventListener('click', () => {
