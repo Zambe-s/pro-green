@@ -32,6 +32,5 @@ const prodottiCollection = defineCollection({
 // Importante: le chiavi 'portfolio' e 'prodotti' devono corrispondere 
 // ai nomi delle cartelle dentro src/content/
 export const collections = {
-	'portfolio': portfolioCollection,
     'prodotti': prodottiCollection,
 };

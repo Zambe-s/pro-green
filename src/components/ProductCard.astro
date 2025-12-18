@@ -3,8 +3,8 @@ export interface Props {
   title: string;
   category: string;
   image: string;
-  price?: string; // Il punto di domanda significa che è opzionale
-  slug: string;   // FONDAMENTALE: serve per creare il link
+  price: string; // Rimosso il "?" - Il prezzo ora è obbligatorio
+  slug: string;
 }
 
 const { title, category, image, price, slug } = Astro.props;
@@ -17,6 +17,7 @@ const { title, category, image, price, slug } = Astro.props;
         <img 
         src={image} 
         alt={title} 
+        transition:name={`img-${slug}`}  /* <--- QUESTA È LA MAGIA */
         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
         />
     ) : (
@@ -31,26 +32,18 @@ const { title, category, image, price, slug } = Astro.props;
 
     <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
       <span class="bg-white text-emerald-700 font-bold rounded-full px-6 py-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 shadow-lg">
-        Visualizza
+        Dettagli
       </span>
     </div>
   </div>
 
   <div class="p-6 flex flex-col flex-grow">
-    <div class="flex justify-between items-start mb-2">
-      <h3 class="text-xl font-bold text-stone-800 leading-tight group-hover:text-emerald-700 transition-colors">
-        {title}
-      </h3>
-    </div>
+    <h3 class="text-xl font-bold text-stone-800 leading-tight group-hover:text-emerald-700 transition-colors mb-4">
+      {title}
+    </h3>
     
     <div class="mt-auto pt-4 border-t border-stone-100 flex items-center justify-between">
-      <div>
-        {price ? (
-          <span class="text-lg font-bold text-emerald-600">{price}</span>
-        ) : (
-          <span class="text-sm font-bold text-stone-400 uppercase">Vedi dettagli</span>
-        )}
-      </div>
+      <span class="text-lg font-bold text-emerald-600">{price}</span>
       
       <div class="w-8 h-8 rounded-full bg-stone-50 flex items-center justify-center text-stone-400 group-hover:bg-emerald-600 group-hover:text-white transition-all">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
